@@ -1,5 +1,8 @@
 package com.sorcery.model;
 
+import lombok.Data;
+
+@Data
 public class AdmissionResult {
     private Application application;
     private int score;
@@ -30,6 +33,6 @@ public class AdmissionResult {
         result.status = "REJECTED";
         result.rejectionReason = reason;
         result.rejectionDetail = detail;
-        return result;  
+        return result;
     }
 }
