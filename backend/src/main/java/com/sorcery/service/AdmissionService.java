@@ -138,12 +138,12 @@ public class AdmissionService {
             case BANNED_FAMILY ->
                 "Family " + app.getFamilyName() + " is banned";
             case OUT_OF_AGE ->
-                "Age " + app.getAge() + "is outside the accepted range";
+                "Age " + app.getAge() + " is outside the accepted range";
             case UNACCEPTABLE_WEAKNESS ->
                 "Weakness " + app.getWeakness() + " is not accepted.";
             case OUT_OF_DATE ->
                 "Application date " + app.getApplicationDate() +
-                        " is outside the application period.";
+                        " is outside the application period";
             default -> " ";
         };
     }
