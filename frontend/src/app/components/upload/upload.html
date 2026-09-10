@@ -1,0 +1,28 @@
+<div class="upload-container">
+  <h1 class="title">School of Sorcery</h1>
+  <p class="subtitle">Council Admission System - 2026/2027</p>
+
+  <div class="upload-box">
+    <p class="upload-label">Upload the applications file</p>
+    <p class="upload-hint">JSON format only</p>
+
+    <label class="upload-btn" for="file-input">
+      Choose file-input
+      <input
+        id="file-input"
+        type="file"
+        accept=".json"
+        (change)="onFileSelected($event)"
+        style="display: none"
+      />
+    </label>
+
+    @if (loading) {
+      <div class="loading">Hold your Hippogriffs...</div>
+    }
+
+    @if (error) {
+      <div class="error">{{ error }}</div>
+    }
+  </div>
+</div>

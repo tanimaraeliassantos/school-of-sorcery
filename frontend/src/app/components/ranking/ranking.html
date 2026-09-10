@@ -1,0 +1,129 @@
+<div class="ranking-container">
+  <div class="header">
+    <div>
+      <h1 class="title">School of Sorcery</h1>
+      <p class="subtitle">Council Admission Results - 2026/2027</p>
+    </div>
+    <div class="stats">
+      <div class="stat accepted">
+        <span class="stat-number">{{ getAcceptedCount() }}</span>
+        <span class="stat-label">Accepted</span>
+      </div>
+      <div class="stat rejected">
+        <span class="stat-number">{{ rejectedCount }}</span>
+        <span class="stat-label">Rejected</span>
+      </div>
+    </div>
+  </div>
+  <!-- FILTERS -->
+  <div class="filters">
+    <input
+      class="search"
+      type="text"
+      placeholder="Search by name..."
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+    />
+    <div class="filter-buttons">
+      <button
+        [class.active]="statusFilter === 'ALL'"
+        (click)="statusFilter = 'ALL'; onFilterChange()"
+      >
+        All ({{ all.length }})
+      </button>
+      <button
+        [class.active]="statusFilter === 'ACCEPTED'"
+        (click)="statusFilter = 'ACCEPTED'; onFilterChange()"
+      >
+        Accepted ({{ getAcceptedCount() }})
+      </button>
+      <button
+        [class.active]="statusFilter === 'REJECTED'"
+        (click)="statusFilter = 'REJECTED'; onFilterChange()"
+      >
+        Rejected ({{ rejectedCount }})
+      </button>
+    </div>
+  </div>
+  <!-- TABLE -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th class="sortable" (click)="sortBy('position')">
+            Rank {{ sortColumn === 'position' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+          <th>Name</th>
+          <th class="sortable" (click)="sortBy('age')">
+            Age {{ sortColumn === 'age' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+          <th>Virtue</th>
+          <th class="sortable" (click)="sortBy('score')">
+            Score {{ sortColumn === 'score' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+          <th class="sortable" (click)="sortBy('status')">
+            Status {{ sortColumn === 'status' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+          <th class="sortable" (click)="sortBy('house')">
+            House / Reason {{ sortColumn === 'house' ? (sortDirection === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of filtered; track r.application.id) {
+          <tr
+            [class.row-accepted]="r.status === 'ACCEPTED'"
+            [class.row-rejected]="r.status === 'REJECTED'"
+          >
+            <td class="rank">
+              @if (r.invitedByHeadmaster) {
+                <span>★</span>
+              } @else if (r.position !== null) {
+                <span>{{ r.position }}</span>
+              } @else {
+                <span>—</span>
+              }
+            </td>
+
+            <td class="name">{{ r.application.firstName }} {{ r.application.familyName }}</td>
+
+            <td>{{ r.application.age }}</td>
+            <td class="virtue">{{ r.application.virtue }}</td>
+
+            <td class="score" [class.negative]="r.score < 0">
+              {{ r.score > 0 ? '+' : '' }}{{ r.score }}
+            </td>
+
+            <td>
+              <span
+                class="badge"
+                [class.badge-accepted]="r.status === 'ACCEPTED'"
+                [class.badge-rejected]="r.status === 'REJECTED'"
+              >
+                {{ r.status }}
+              </span>
+            </td>
+
+            <td>
+              @if (r.status === 'ACCEPTED') {
+                <span class="house house-{{ r.house?.toLowerCase() }}">
+                  {{ r.house }}
+                </span>
+              } @else {
+                <span class="reason">
+                  {{ getRejectionLabel(r) }}
+                </span>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="no-results">
+              No applications match the current filter criteria.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
