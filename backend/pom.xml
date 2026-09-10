@@ -21,8 +21,6 @@
     </properties>
 
     <dependencies>
-        <!-- Cambiado de spring-boot-starter-webmvc a spring-boot-starter-web -->
-        <!-- Esto incluye automáticamente Jackson, ObjectMapper y JavaTimeModule -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -48,8 +46,21 @@
         </dependency>
     </dependencies>
 
-    <build>
+<build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
