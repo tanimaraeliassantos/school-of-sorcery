@@ -72,6 +72,31 @@ public class AdmissionService {
         return score;
     }
 
+    public int calculateVirtuePoints(Application app, Rules rules) {
+        return rules.getPoints().getVirtue()
+                .getOrDefault(app.getVirtue(), 0);
+    }
+
+    public int calculateFamilyPoints(Application app, Rules rules) {
+        return rules.getPoints().getFamily()
+                .getOrDefault(app.getFamilyName(), 0);
+    }
+
+    public int calculateWeaknessPoints(Application app, Rules rules) {
+        return rules.getPoints().getWeakness()
+                .getOrDefault(app.getWeakness(), 0);
+    }
+
+    public int calculateAgePoints(Application app, Rules rules) {
+        for (Rules.AgePoints agePoints : rules.getPoints().getAge()) {
+            if (app.getAge() >= agePoints.getFrom() &&
+                    app.getAge() <= agePoints.getTo()) {
+                return agePoints.getPoints();
+            }
+        }
+        return 0;
+    }
+
     // Ordenación
     private List<Application> sort(List<Application> apps, Rules rules) {
         return apps.stream()
@@ -95,7 +120,8 @@ public class AdmissionService {
 
             if (isInvited(app, rules)) {
                 results.add(AdmissionResult.accepted(
-                        app, 0, 0, null, true));
+                        app, 0, 0, null, true,
+                        0, 0, 0, 0));
                 continue;
             }
 
@@ -103,7 +129,8 @@ public class AdmissionService {
             if (veto.isPresent()) {
                 String detail = buildVetoDetail(veto.get(), app);
                 results.add(AdmissionResult.rejected(
-                        app, 0, null, veto.get(), detail));
+                        app, 0, null, veto.get(), detail,
+                        0, 0, 0, 0));
                 continue;
             }
             eligible.add(app);
@@ -122,11 +149,19 @@ public class AdmissionService {
 
             if (i < availablePlaces) {
                 results.add(AdmissionResult.accepted(
-                        app, score, position, null, false));
+                        app, score, position, null, false,
+                        calculateVirtuePoints(app, rules),
+                        calculateFamilyPoints(app, rules),
+                        calculateWeaknessPoints(app, rules),
+                        calculateAgePoints(app, rules)));
             } else {
                 results.add(AdmissionResult.rejected(
                         app, score, position, RejectionReason.NO_PLACE,
-                        "Ranked " + position + " — no places remaining"));
+                        "Ranked " + position + " — no places remaining",
+                        calculateVirtuePoints(app, rules),
+                        calculateFamilyPoints(app, rules),
+                        calculateWeaknessPoints(app, rules),
+                        calculateAgePoints(app, rules)));
             }
         }
 

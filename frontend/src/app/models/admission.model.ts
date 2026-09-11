@@ -20,6 +20,10 @@ export interface AdmissionResult {
   rejectionDetail: string | null;
   house: string | null;
   invitedByHeadmaster: boolean;
+  virtuePoints: number;
+  familyPoints: number;
+  weaknessPoints: number;
+  agePoints: number;
 }
 
 export interface AdmissionResponse {

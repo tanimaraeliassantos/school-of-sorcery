@@ -14,7 +14,24 @@
         <span class="stat-label">Rejected</span>
       </div>
     </div>
+    <button class="back-btn" (click)="onReset()">← Upload new file</button>
   </div>
+
+  <!-- HOUSE CARDS -->
+  <div class="house-cards">
+    @for (stat of getHouseStats(); track stat.name) {
+      <div class="house-card house-card-{{ stat.name.toLowerCase() }}">
+        <div class="house-card-name">{{ stat.name }}</div>
+        <div class="house-card-count">{{ stat.count }}</div>
+        <div class="house-card-label">students</div>
+        <div class="house-bar-track">
+          <div class="house-bar-fill" [style.width.%]="stat.percentage"></div>
+        </div>
+        <div class="house-card-pct">{{ stat.percentage }}%</div>
+      </div>
+    }
+  </div>
+
   <!-- FILTERS -->
   <div class="filters">
     <input
@@ -29,24 +46,22 @@
     <div class="filter-buttons">
       <button
         [class.active]="statusFilter === 'ALL'"
-        (click)="statusFilter = 'ALL'; onFilterChange()"
-      >
+        (click)="statusFilter = 'ALL'; onFilterChange()">
         All ({{ all.length }})
       </button>
       <button
         [class.active]="statusFilter === 'ACCEPTED'"
-        (click)="statusFilter = 'ACCEPTED'; onFilterChange()"
-      >
+        (click)="statusFilter = 'ACCEPTED'; onFilterChange()">
         Accepted ({{ getAcceptedCount() }})
       </button>
       <button
         [class.active]="statusFilter === 'REJECTED'"
-        (click)="statusFilter = 'REJECTED'; onFilterChange()"
-      >
+        (click)="statusFilter = 'REJECTED'; onFilterChange()">
         Rejected ({{ rejectedCount }})
       </button>
     </div>
   </div>
+
   <!-- TABLE -->
   <div class="table-wrapper">
     <table>
@@ -76,45 +91,31 @@
           <tr
             [class.row-accepted]="r.status === 'ACCEPTED'"
             [class.row-rejected]="r.status === 'REJECTED'"
-          >
+            (click)="onRowClick(r)"
+            class="clickable-row">
             <td class="rank">
-              @if (r.invitedByHeadmaster) {
-                <span>★</span>
-              } @else if (r.position !== null) {
-                <span>{{ r.position }}</span>
-              } @else {
-                <span>—</span>
-              }
+              @if (r.invitedByHeadmaster) { <span>★</span> }
+              @else if (r.position !== null) { <span>{{ r.position }}</span> }
+              @else { <span>—</span> }
             </td>
-
             <td class="name">{{ r.application.firstName }} {{ r.application.familyName }}</td>
-
             <td>{{ r.application.age }}</td>
             <td class="virtue">{{ r.application.virtue }}</td>
-
             <td class="score" [class.negative]="r.score < 0">
               {{ r.score > 0 ? '+' : '' }}{{ r.score }}
             </td>
-
             <td>
-              <span
-                class="badge"
+              <span class="badge"
                 [class.badge-accepted]="r.status === 'ACCEPTED'"
-                [class.badge-rejected]="r.status === 'REJECTED'"
-              >
+                [class.badge-rejected]="r.status === 'REJECTED'">
                 {{ r.status }}
               </span>
             </td>
-
             <td>
               @if (r.status === 'ACCEPTED') {
-                <span class="house house-{{ r.house?.toLowerCase() }}">
-                  {{ r.house }}
-                </span>
+                <span class="house house-{{ r.house?.toLowerCase() }}">{{ r.house }}</span>
               } @else {
-                <span class="reason">
-                  {{ getRejectionLabel(r) }}
-                </span>
+                <span class="reason">{{ getRejectionLabel(r) }}</span>
               }
             </td>
           </tr>
@@ -129,3 +130,101 @@
     </table>
   </div>
 </div>
+
+<!-- DETAIL PANEL -->
+@if (selectedResult) {
+  <div class="panel-overlay" (click)="onClosePanel()"></div>
+  <div class="detail-panel">
+    <button class="panel-close" (click)="onClosePanel()">✕</button>
+
+    <div class="panel-header">
+      <h2 class="panel-name">
+        {{ selectedResult.application.firstName }}
+        {{ selectedResult.application.familyName }}
+      </h2>
+      <span class="badge"
+        [class.badge-accepted]="selectedResult.status === 'ACCEPTED'"
+        [class.badge-rejected]="selectedResult.status === 'REJECTED'">
+        {{ selectedResult.status }}
+      </span>
+    </div>
+
+    <div class="panel-meta">
+      <span>Age {{ selectedResult.application.age }}</span>
+      <span>·</span>
+      <span class="capitalize">{{ selectedResult.application.virtue }}</span>
+      <span>·</span>
+      <span>Applied {{ selectedResult.application.applicationDate }}</span>
+    </div>
+
+    @if (selectedResult.status === 'ACCEPTED') {
+      <div class="panel-position">
+        @if (selectedResult.invitedByHeadmaster) {
+          <span class="invited-label">★ Invited by the Headmaster</span>
+        } @else {
+          <span class="position-label">Ranked #{{ selectedResult.position }}</span>
+        }
+        <span class="house house-{{ selectedResult.house?.toLowerCase() }}">
+          {{ selectedResult.house }}
+        </span>
+      </div>
+    }
+
+    @if (selectedResult.status === 'REJECTED') {
+      <div class="panel-rejection">
+        <span class="rejection-label">Rejected —</span>
+        <span class="reason">{{ getRejectionLabel(selectedResult) }}</span>
+      </div>
+    }
+
+    <div class="panel-divider">Score breakdown</div>
+
+    <div class="breakdown">
+      @for (item of getScoreBreakdown(selectedResult); track item.label) {
+        <div class="breakdown-row">
+          <span class="breakdown-label">{{ item.label }}</span>
+          <span class="breakdown-value"
+            [class.positive]="item.value > 0"
+            [class.zero]="item.value === 0"
+            [class.negative]="item.value < 0">
+            {{ item.value > 0 ? '+' : '' }}{{ item.value }}
+          </span>
+        </div>
+      }
+      <div class="breakdown-total">
+        <span>Total</span>
+        <span class="total-value" [class.negative]="selectedResult.score < 0">
+          {{ selectedResult.score > 0 ? '+' : '' }}{{ selectedResult.score }}
+        </span>
+      </div>
+    </div>
+
+    @if (selectedResult.status === 'ACCEPTED') {
+      <div class="panel-divider">House scores</div>
+
+      <div class="house-scores">
+        @for (h of getHouseScores(selectedResult); track h.name) {
+          <div class="house-score-row" [class.house-won]="h.won">
+            <div class="house-score-name house-{{ h.name.toLowerCase() }}">
+              {{ h.name }}
+              @if (h.won) { <span class="won-label">✦ assigned</span> }
+            </div>
+            <div class="house-score-bar-track">
+              <div class="house-score-bar-fill house-fill-{{ h.name.toLowerCase() }}"
+                [style.width.%]="getMaxHouseScore(selectedResult) > 0
+                  ? (h.score / getMaxHouseScore(selectedResult)) * 100
+                  : 0">
+              </div>
+            </div>
+            <div class="house-score-value"
+              [class.positive]="h.score > 0"
+              [class.zero]="h.score === 0">
+              {{ h.score }}
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+}
