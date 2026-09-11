@@ -20,4 +20,8 @@ export class App {
   reset(): void {
     this.response = null;
   }
+
+  onReset(): void {
+    this.response = null;
+  }
 }

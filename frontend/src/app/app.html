@@ -3,5 +3,5 @@
 }
 
 @if (response) {
-  <app-ranking [response]="response" />
+  <app-ranking [response]="response" (reset)="onReset()" />
 }
