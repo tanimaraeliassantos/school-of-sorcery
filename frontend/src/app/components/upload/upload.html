@@ -2,27 +2,33 @@
   <h1 class="title">School of Sorcery</h1>
   <p class="subtitle">Council Admission System - 2026/2027</p>
 
-  <div class="upload-box">
-    <p class="upload-label">Upload the applications file</p>
-    <p class="upload-hint">JSON format only</p>
+  <div
+  class="upload-box"
+  [class.dragging]="isDragging"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)">
 
-    <label class="upload-btn" for="file-input">
-      Choose file-input
-      <input
-        id="file-input"
-        type="file"
-        accept=".json"
-        (change)="onFileSelected($event)"
-        style="display: none"
-      />
-    </label>
+  <p class="upload-label">Drop your applications file here</p>
 
-    @if (loading) {
-      <div class="loading">Hold your Hippogriffs...</div>
-    }
+  <label class="upload-btn" for="file-input">
+     or choose file
+    <input
+      id="file-input"
+      type="file"
+      accept=".json"
+      (change)="onFileSelected($event)"
+      style="display:none"
+    />
+  </label>
+   <p class="upload-hint">JSON only</p>
 
-    @if (error) {
-      <div class="error">{{ error }}</div>
-    }
-  </div>
+  @if (loading) {
+    <div class="loading">Hold your Hippogriffs...</div>
+  }
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+</div>
 </div>
