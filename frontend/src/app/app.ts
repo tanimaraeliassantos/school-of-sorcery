@@ -17,10 +17,6 @@ export class App {
     this.response = response;
   }
 
-  reset(): void {
-    this.response = null;
-  }
-
   onReset(): void {
     this.response = null;
   }
