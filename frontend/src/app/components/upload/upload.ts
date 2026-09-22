@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AdmissionResponse } from '../../models/admission.model';
 import { AdmissionService } from '../../services/admission.service';
 
 @Component({
   selector: 'app-upload',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './upload.html',
   styleUrl: './upload.scss',
 })

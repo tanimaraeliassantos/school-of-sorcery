@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdmissionResponse, AdmissionResult } from '../../models/admission.model';
 
 @Component({
   selector: 'app-ranking',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './ranking.html',
   styleUrl: './ranking.scss',
 })
