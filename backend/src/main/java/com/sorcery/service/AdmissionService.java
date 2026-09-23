@@ -14,6 +14,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdmissionService {
+
+    private final HouseService houseService;
+
+    public AdmissionService(HouseService houseService) {
+        this.houseService = houseService;
+    }
+
     // Invitaciones
     private boolean isInvited(Application app, Rules rules) {
         String fullName = app.getFirstName() + " " + app.getFamilyName();
@@ -121,7 +128,7 @@ public class AdmissionService {
             if (isInvited(app, rules)) {
                 results.add(AdmissionResult.accepted(
                         app, 0, 0, null, true,
-                        0, 0, 0, 0));
+                        0, 0, 0, 0, houseService.calculateHouseScores(app, rules)));
                 continue;
             }
 
@@ -130,7 +137,7 @@ public class AdmissionService {
                 String detail = buildVetoDetail(veto.get(), app);
                 results.add(AdmissionResult.rejected(
                         app, 0, null, veto.get(), detail,
-                        0, 0, 0, 0));
+                        0, 0, 0, 0, new ArrayList<>()));
                 continue;
             }
             eligible.add(app);
@@ -153,7 +160,8 @@ public class AdmissionService {
                         calculateVirtuePoints(app, rules),
                         calculateFamilyPoints(app, rules),
                         calculateWeaknessPoints(app, rules),
-                        calculateAgePoints(app, rules)));
+                        calculateAgePoints(app, rules),
+                        houseService.calculateHouseScores(app, rules)));
             } else {
                 results.add(AdmissionResult.rejected(
                         app, score, position, RejectionReason.NO_PLACE,
@@ -161,7 +169,8 @@ public class AdmissionService {
                         calculateVirtuePoints(app, rules),
                         calculateFamilyPoints(app, rules),
                         calculateWeaknessPoints(app, rules),
-                        calculateAgePoints(app, rules)));
+                        calculateAgePoints(app, rules),
+                        new ArrayList<>()));
             }
         }
 

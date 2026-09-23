@@ -1,7 +1,11 @@
 package com.sorcery.service;
 
 import com.sorcery.model.Rules;
+import com.sorcery.model.AdmissionResult;
 import com.sorcery.model.Application;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -44,6 +48,18 @@ public class HouseService {
             }
         }
         return bestHouse;
+    }
+
+    // Fixing the house scores calculation to return a list of house scores for each
+    // applicant
+    public List<AdmissionResult.HouseScore> calculateHouseScores(Application app, Rules rules) {
+        List<AdmissionResult.HouseScore> houseScores = new ArrayList<>();
+        for (Rules.House house : rules.getHouses()) {
+            int score = calculateHouseScore(app, house);
+            houseScores.add(new AdmissionResult.HouseScore(house.getName(), score));
+        }
+        return houseScores;
+
     }
 
 }

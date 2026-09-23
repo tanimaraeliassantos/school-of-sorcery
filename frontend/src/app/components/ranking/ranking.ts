@@ -198,44 +198,11 @@ export class Ranking implements OnInit {
   }
 
   getHouseScores(result: AdmissionResult): { name: string; score: number; won: boolean }[] {
-    const app = result.application;
-    const houses = [
-      {
-        name: 'Lion',
-        virtue: { courage: 8, loyalty: 5 },
-        weakness: { shyness: 4 },
-        family: { Marlowe: 4 },
-      },
-      {
-        name: 'Serpent',
-        virtue: { ambition: 8, cunning: 5 },
-        weakness: { pride: 4 },
-        family: { Ferris: 4 },
-      },
-      {
-        name: 'Raven',
-        virtue: { wit: 8, curiosity: 5 },
-        weakness: { untidiness: 4 },
-        family: { Yewbank: 4 },
-      },
-      {
-        name: 'Badger',
-        virtue: { kindness: 8, patience: 5 },
-        weakness: { laziness: 4 },
-        family: { Nutwood: 4 },
-      },
-    ];
-
-    const scores = houses.map((h) => {
-      let score = 0;
-      score += (h.virtue as unknown as Record<string, number>)[app.virtue] ?? 0;
-      score += (h.weakness as unknown as Record<string, number>)[app.weakness] ?? 0;
-      score += (h.family as unknown as Record<string, number>)[app.familyName] ?? 0;
-      return { name: h.name, score, won: h.name === result.house };
-    });
-
-    const max = Math.max(...scores.map((s) => s.score));
-    return scores;
+    return result.houseScores.map((hs) => ({
+      name: hs.house,
+      score: hs.score,
+      won: hs.house === result.house,
+    }));
   }
 
   getMaxHouseScore(result: AdmissionResult): number {

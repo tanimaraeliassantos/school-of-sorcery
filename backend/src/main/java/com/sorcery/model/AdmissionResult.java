@@ -1,6 +1,7 @@
 package com.sorcery.model;
 
 import lombok.Data;
+import java.util.List;
 
 @Data
 public class AdmissionResult {
@@ -16,10 +17,12 @@ public class AdmissionResult {
     private int familyPoints;
     private int weaknessPoints;
     private int agePoints;
+    // List of house scores for the applicant
+    private List<HouseScore> houseScores;
 
     public static AdmissionResult accepted(Application app, int score, int position, String house, boolean invited,
             int virtuePoints, int familyPoints,
-            int weaknessPoints, int agePoints) {
+            int weaknessPoints, int agePoints, List<HouseScore> houseScores) {
         AdmissionResult result = new AdmissionResult();
         result.application = app;
         result.score = score;
@@ -31,13 +34,15 @@ public class AdmissionResult {
         result.familyPoints = familyPoints;
         result.weaknessPoints = weaknessPoints;
         result.agePoints = agePoints;
+        // Set the house scores for the applicant
+        result.houseScores = houseScores;
         return result;
     }
 
     public static AdmissionResult rejected(Application app, int score, Integer position, RejectionReason reason,
             String detail,
             int virtuePoints, int familyPoints,
-            int weaknessPoints, int agePoints) {
+            int weaknessPoints, int agePoints, List<HouseScore> houseScores) {
         AdmissionResult result = new AdmissionResult();
         result.application = app;
         result.score = score;
@@ -49,6 +54,11 @@ public class AdmissionResult {
         result.familyPoints = familyPoints;
         result.weaknessPoints = weaknessPoints;
         result.agePoints = agePoints;
+        // Set the house scores for the applicant
+        result.houseScores = houseScores;
         return result;
+    }
+    // Record to hold house name and score
+    public record HouseScore(String house, int score) {
     }
 }

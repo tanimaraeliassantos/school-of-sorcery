@@ -19,9 +19,9 @@ class AdmissionServiceTest {
     private Rules rules;
 
     @BeforeEach
-    void setUp() {
-        admissionService = new AdmissionService();
+    void setUp() {  
         houseService = new HouseService();
+        admissionService = new AdmissionService(houseService);
         rules = buildTestRules();
     }
 

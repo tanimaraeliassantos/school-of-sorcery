@@ -11,6 +11,11 @@ export interface Application {
 export type RejectionReason =
   'BANNED_FAMILY' | 'OUT_OF_AGE' | 'UNNACCEPTABLE_WEAKNESS' | 'OUT_OF_DATE' | 'NO_PLACE';
 
+  export interface HouseScore {
+    house: string;
+    score: number;
+  }
+
 export interface AdmissionResult {
   application: Application;
   score: number;
@@ -24,6 +29,7 @@ export interface AdmissionResult {
   familyPoints: number;
   weaknessPoints: number;
   agePoints: number;
+  houseScores:HouseScore[];
 }
 
 export interface AdmissionResponse {
