@@ -149,6 +149,9 @@ public class AdmissionService {
 
         List<Application> sorted = sort(eligible, rules);
 
+        int lastScore = 0;
+        boolean hasLastScore = false;
+
         for (int i = 0; i < sorted.size(); i++) {
             Application app = sorted.get(i);
             int score = calculateScore(app, rules);
@@ -162,15 +165,31 @@ public class AdmissionService {
                         calculateWeaknessPoints(app, rules),
                         calculateAgePoints(app, rules),
                         houseService.calculateHouseScores(app, rules)));
+
+                if (i == availablePlaces - 1) {
+                    lastScore = score;
+                    hasLastScore = true;
+                }
             } else {
-                results.add(AdmissionResult.rejected(
-                        app, score, position, RejectionReason.NO_PLACE,
-                        "Ranked " + position + " — no places remaining",
-                        calculateVirtuePoints(app, rules),
-                        calculateFamilyPoints(app, rules),
-                        calculateWeaknessPoints(app, rules),
-                        calculateAgePoints(app, rules),
-                        new ArrayList<>()));
+                if (hasLastScore && lastScore == score) {
+                    results.add(AdmissionResult.accepted(
+                            app, score, position, null, false,
+                            calculateVirtuePoints(app, rules),
+                            calculateFamilyPoints(app, rules),
+                            calculateWeaknessPoints(app, rules),
+                            calculateAgePoints(app, rules),
+                            houseService.calculateHouseScores(app, rules)));
+
+                } else {
+                    results.add(AdmissionResult.rejected(
+                            app, score, position, RejectionReason.NO_PLACE,
+                            "Ranked " + position + " — no places remaining",
+                            calculateVirtuePoints(app, rules),
+                            calculateFamilyPoints(app, rules),
+                            calculateWeaknessPoints(app, rules),
+                            calculateAgePoints(app, rules),
+                            new ArrayList<>()));
+                }
             }
         }
 

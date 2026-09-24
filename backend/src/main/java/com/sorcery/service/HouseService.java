@@ -6,6 +6,8 @@ import com.sorcery.model.Application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.springframework.stereotype.Service;
 
@@ -62,4 +64,14 @@ public class HouseService {
 
     }
 
+    // Crear un Set para guardar todas las casas disponibles aunque no estén
+    // asignadas a ningun candidato, no se pueden repetir pero da igual
+    // orden(HashSet).
+    public Set<String> getAllHouses(Rules rules) {
+        Set<String> allHouses = new HashSet<>();
+        for (Rules.House house : rules.getHouses()) {
+            allHouses.add(house.getName());
+        }
+        return allHouses;
+    }
 }

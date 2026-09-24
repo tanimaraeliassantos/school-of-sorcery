@@ -113,6 +113,21 @@
 					"Nutwood": 4
 				}
 			}
+		},
+		{
+			"name": "Falcon",
+			"points": {
+				"virtue": {
+					"curiosity": 0,
+					"cunning": 0
+				},
+				"weakness": {
+					"impatience": 0
+				},
+				"family": {
+					"Nutwood": 2
+				}
+			}
 		}
 	]
 }

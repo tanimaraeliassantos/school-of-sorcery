@@ -294,6 +294,9 @@ table {
   border-radius: 2px;
   font-size: 0.82rem;
   letter-spacing: 1px;
+  color: #620a62;
+  background: rgba(98, 10, 98, 0.15);
+  border: 1px solid rgba(98, 10, 98, 0.4);
 
   &.house-lion {
     color: #ffd700;
@@ -524,12 +527,14 @@ table {
 }
 
 .house-card {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(201, 162, 39, 0.05);
   border-radius: 6px;
   padding: 20px;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(171, 134, 33, 0.241);
+  border-top: 3px solid #620a62;
   transition: transform 0.15s;
+  color: #ffffff;
 
   &:hover {
     transform: translateY(-2px);
@@ -574,6 +579,16 @@ table {
       background: #ffaa60;
     }
   }
+
+  &:nth-child(5) {
+    border-top: 3px solid #620a62;
+    .house-card-name {
+      color: #620a62;
+    }
+    .house-bar-fill {
+      background: #620a62;
+    }
+  }
 }
 
 .house-card-name {
@@ -582,6 +597,7 @@ table {
   text-transform: uppercase;
   font-family: 'Georgia', serif;
   margin-bottom: 8px;
+  color: #ffffff;
 }
 
 .house-card-count {
@@ -612,6 +628,7 @@ table {
   height: 100%;
   border-radius: 2px;
   transition: width 0.6s ease;
+  background: #620a62;
 }
 
 .house-card-pct {
@@ -646,6 +663,7 @@ table {
   letter-spacing: 1px;
   margin-bottom: 6px;
   font-family: 'Georgia', serif;
+  color: #620a62;
 
   &.house-lion {
     color: #ffd700;

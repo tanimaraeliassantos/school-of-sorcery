@@ -184,7 +184,7 @@ export class Ranking implements OnInit {
   }
 
   getHouseStats(): { name: string; count: number; percentage: number }[] {
-    const houses = ['Lion', 'Serpent', 'Raven', 'Badger'];
+    const houses = this.response.houses;
     const total = this.response.accepted.length;
 
     return houses.map((house) => {
